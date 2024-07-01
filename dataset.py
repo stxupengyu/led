@@ -1,28 +1,15 @@
 import os
 import numpy as np
-import torch.utils.data as data_utils
 import torch
-import joblib
-from tqdm import tqdm
-import logging
-import json
-import random
-import pandas as pd
-import torch
+from torch.autograd import Variable
 from torch.utils.data import Dataset, DataLoader
-from transformers import BertTokenizer, AdamW
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.metrics import f1_score, average_precision_score
 from tqdm import tqdm
-from transformers import BertTokenizer, BertConfig, BertModel
-from transformers import RobertaModel, RobertaConfig, RobertaTokenizer
-from transformers import XLNetTokenizer, XLNetModel, XLNetConfig
-from transformers import RobertaTokenizerFast
-import math
-import os.path
-import numpy as np
-import itertools
+from transformers import BertTokenizer, RobertaTokenizer, XLNetTokenizer, RobertaModel, XLNetModel, BertModel
+import logging
+import pandas as pd
 import random
-from torch.utils.data import Dataset
-import torch
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',

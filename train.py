@@ -1,15 +1,16 @@
-from tqdm import tqdm
-from test import evaluate
-import torch
-import numpy as np
-import torch.nn as nn
-import torch.nn.functional as F
-from correction import label_correction
 import os
 import time
+import torch
+import numpy as np
+from tqdm import tqdm
 from sklearn.mixture import GaussianMixture as GMM
-from collect import cd_collect, rel_collect, RE_cd_collect, RE_rel_collect
 from torch.autograd import Variable
+import torch.nn as nn
+import torch.nn.functional as F
+
+from test import evaluate
+from correction import label_correction
+from collect import cd_collect, rel_collect, RE_cd_collect, RE_rel_collect
 
 
 
@@ -95,7 +96,7 @@ def train(model, optimizer, train_loader, val_loader, test_loader, args):
                 metrics = evaluate(model, val_loader, args.device)
                 print(f'Epochs: {epoch} | Step: {global_step} | Early Stop: {num_stop_dropping} | Valid Result: {metrics}')
 
-                valid_result = metrics['f1']
+                valid_result = metrics['micro_f1']
                 if valid_result > best_valid_result:
                     best_valid_result = valid_result
                     num_stop_dropping = 0
@@ -108,9 +109,8 @@ def train(model, optimizer, train_loader, val_loader, test_loader, args):
 
 def RE_train_batch(model, batch, args):
     X, musk, p1, p2, y = batch
-    X, musk, p1, p2, y = [torch.from_numpy(x) for x in X], [torch.from_numpy(x) for x in musk], [torch.from_numpy(x) for x in p1], [torch.from_numpy(x) for x in p2], torch.from_numpy(np.asarray(y, dtype=np.int_))
-    X, musk, p1, p2, y = [Variable(x) for x in X], [Variable(x) for x in musk], [Variable(x) for x in p1], [Variable(x) for x in p2], Variable(y)
-    X, musk, p1, p2, y= [x.cuda() for x in X], [x.cuda() for x in musk], [x.cuda() for x in p1], [x.cuda() for x in p2], y.cuda()
+    X, musk, p1, p2, y = [torch.from_numpy(x) for x in (X, musk, p1, p2)], torch.from_numpy(np.asarray(y, dtype=np.int_))
+    X, musk, p1, p2, y = [Variable(x).cuda() for x in (X, musk, p1, p2, y)]
     features, logits, loss = model.baseModel(X, musk, p1, p2, y)		
     return features, logits, loss
 

@@ -3,18 +3,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
-import numpy as np
-import torch
-from torch import nn
-from transformers import BertTokenizer, BertConfig, BertModel
-from transformers import RobertaModel, RobertaConfig, RobertaTokenizer
-from transformers import XLNetTokenizer, XLNetModel, XLNetConfig
-from transformers import RobertaTokenizerFast
-import torch.nn.functional as F  
-import numpy as np
-import torch
-import torch.nn as nn
-from torch.autograd import Variable  
+from transformers import (
+    BertTokenizer, BertConfig, BertModel,
+    RobertaModel, RobertaConfig, RobertaTokenizer,
+    XLNetTokenizer, XLNetModel, XLNetConfig,
+    RobertaTokenizerFast
+)
+from torch.autograd import Variable
 
 
 def get_bert(args):

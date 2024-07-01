@@ -4,19 +4,21 @@ import argparse
 import time
 import random
 import numpy as np
-import dataset, train, test, preprocess
-from optimizers import *
-from model import MltcNet, RE
-from utils import time_since, cprint
-import torch
-from torch.optim import Adam
 import datetime
-import pandas as pd
 import torch
-from transformers import BertTokenizer, AdamW
-from tqdm import tqdm
+import pandas as pd
 import torch.nn as nn
 import torch.optim as optim
+from torch.optim import Adam
+from transformers import BertTokenizer, AdamW
+from tqdm import tqdm
+
+import dataset
+import train
+import test
+import preprocess
+from model import MltcNet, RE
+from utils import time_since, cprint
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -38,7 +40,7 @@ def main():
     parser.add_argument('--theta', type=float, 
                         help='theta', default=3)    
     parser.add_argument('--epsilon', type=float, 
-                        help='theta', default=0.01)    
+                        help='epsilon', default=0.01)    
     parser.add_argument('--small_loss_epoch', type=int, 
                         help='small_loss_epoch', default=2)
 
@@ -194,6 +196,7 @@ def pipeline(args):
         f.write(' |epsilon:'+args.epsilon)
         f.write(' |alpha:'+str(args.alpha))
         f.write(' |theta:'+str(args.theta))
+        f.write(' |rho:'+str(args.rho))
         f.write(' |result:' +' '.join([str(i) for i in result])+'\n')
         f.close()
 
@@ -206,14 +209,14 @@ def pipelint_RE(args):
     optimizer = use_optimizer(model, lr=args.lr, method=args.optimizer)
     
     # train
-	dataset = dataset.RE_Dataset(data_loader, dataset='train', shuffle=True)
-	trainloader = data.RE_DataLoader(dataset, batch_size=args.batch, num_workers=args.n_worker, collate_fn=dataset.data_collate)
+    dataset = dataset.RE_Dataset(data_loader, dataset='train', shuffle=True)
+    trainloader = data.RE_DataLoader(dataset, batch_size=args.batch, num_workers=args.n_worker, collate_fn=dataset.data_collate)
     train.train_riedel(model, trainloader, optimizer, args)
 
     # test
     model.load_state_dict(torch.load(args.model_path, map_location=args.device)) 
     dataset = dataset.RE_Dataset(data_loader, dataset='test')
-	testloader = dataset.Riedel_DataLoader(dataset, batch_size=args.batch, num_workers=args.n_worker, collate_fn=dataset.data_collate)
+    testloader = dataset.Riedel_DataLoader(dataset, batch_size=args.batch, num_workers=args.n_worker, collate_fn=dataset.data_collate)
     result = test.evaluate_riedel(model, testloader, args)
     logger.info(f'Final Test Result: {result}')
 
@@ -222,6 +225,7 @@ def pipelint_RE(args):
         f.write(' |epsilon:'+args.epsilon)
         f.write(' |alpha:'+str(args.alpha))
         f.write(' |theta:'+str(args.theta))
+        f.write(' |rho:'+str(args.rho))
         f.write(' |result:' +' '.join([str(i) for i in result])+'\n')
         f.close()
 
@@ -241,11 +245,12 @@ def use_optimizer(model, lr, weight_decay=0, lr_decay=0, momentum=0, rho=0.95, m
     else:
         raise Exception("Invalid method, option('sgd', 'adagrad', 'adadelta', 'adam')")
 
-def resume(step):
-    load_file = args.save_dir+'%d_step.mod.tar'%step
+def resume(step, args):
+    load_file = os.path.join(args.save_dir, f'{step}_step.mod.tar')
     if os.path.isfile(load_file):	
         checkpoint = torch.load(load_file)	
         return checkpoint	
+    return None
 
 if __name__ == '__main__':
     main()
