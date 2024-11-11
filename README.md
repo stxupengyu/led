@@ -1,6 +1,6 @@
 # LeD
 
-Official code for our paper. 
+Official code for our paper "Enhancing Multi-Label Text Classification under Label-Dependent Noise: A Label-Specific Denoising Framework". 
 
 ## Requirements: 
 * python==3.9.19 
@@ -17,22 +17,6 @@ Official code for our paper.
 
 ## Datasets
 LeD uses the same datasets with [nEM](https://ieeexplore.ieee.org/document/9975199).
-The original datasets are available from the following links. 
-
-* [MOVIE](https://github.com/davidsbatista/text-classification)
-* [AAPD](https://git.uwaterloo.ca/jimmylin/Castor-data/tree/master/datasets/AAPD/data)
-* [RCV1](http://www.ai.mit.edu/projects/jmlr/papers/volume5/lewis04a/lyrl2004_rcv1v2_README.htm)
-* [Riedel](https://github.com/AlbertChen1991/nEM)
-
-The processed dataset are available from the following links.
-please download them from the following links.
-Due to copyright issues, we can't directly release the RCV1 datasets used in our experiments. Instead, we provide the link to the data sources (require license).
-
-* [MOVIE](https://www.dropbox.com/scl/fi/mpodhwyxj7y25i9pj25en/MOVIE.zip?rlkey=w2rgb59p6mt4tcdtla5vtguma&e=1&st=0rs70q5i&dl=0)
-* [AAPD](https://www.dropbox.com/scl/fi/veorgip9rawzocd6z51tz/AAPD.zip?rlkey=4gvuxmetaox2e46ie9oxxvt36&e=1&st=l99z6yze&dl=0)
-* [RCV1](http://www.ai.mit.edu/projects/jmlr/papers/volume5/lewis04a/lyrl2004_rcv1v2_README.htm) 
-* [Riedel](https://drive.google.com/drive/folders/1u2HVCYoJcV5SiFcmrP0yEIn5E5tJ6Mbg)
-
 
 ## Experiments
 
