@@ -1,6 +1,6 @@
 # LeD
 
-Official code for our paper "Enhancing Multi-Label Text Classification under Label-Dependent Noise: A Label-Specific Denoising Framework" EMNLP 2024. 
+ "Enhancing Multi-Label Text Classification under Label-Dependent Noise: A Label-Specific Denoising Framework" EMNLP 2024. 
 
 ## Requirements: 
 * python==3.9.19 
